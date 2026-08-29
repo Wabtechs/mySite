@@ -1,0 +1,453 @@
+/* ============================================================================
+   enhance.css — Professional animation & polish layer for Wabtechs portfolio
+   Layered on top of style.css + theme.css. Works in dark (default) & light.
+============================================================================ */
+
+:root {
+  --eh-accent: var(--primary-color, #842ae3);
+  --eh-accent-2: #6d28d9;
+  --eh-accent-3: #22d3ee;
+  --eh-glow: rgba(132, 42, 227, 0.55);
+  --eh-radius: 16px;
+  --eh-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =====================================================================
+   Scroll-reveal system (also used via enhance.js)
+   Elements start hidden and animate in when scrolled into view.
+===================================================================== */
+.reveal,
+.reveal-up,
+.reveal-down,
+.reveal-left,
+.reveal-right,
+.reveal-zoom,
+.reveal-flip,
+.reveal-blur {
+  opacity: 0;
+  will-change: transform, opacity, filter;
+  transition-property: opacity, transform, filter;
+  transition-timing-function: var(--eh-ease);
+  transition-duration: 0.9s;
+}
+
+.reveal-up    { transform: translateY(46px); }
+.reveal-down  { transform: translateY(-46px); }
+.reveal-left  { transform: translateX(-60px); }
+.reveal-right { transform: translateX(60px); }
+.reveal-zoom  { transform: scale(0.86); }
+.reveal-flip  { transform: perspective(900px) rotateY(24deg); }
+.reveal-blur  { filter: blur(14px); transform: translateY(24px); }
+
+.reveal.in-view,
+.reveal-up.in-view,
+.reveal-down.in-view,
+.reveal-left.in-view,
+.reveal-right.in-view,
+.reveal-zoom.in-view,
+.reveal-flip.in-view,
+.reveal-blur.in-view {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Stagger delay helpers (use with [data-delay] too) */
+.delay-1  { transition-delay: 0.1s; }
+.delay-2  { transition-delay: 0.2s; }
+.delay-3  { transition-delay: 0.3s; }
+.delay-4  { transition-delay: 0.4s; }
+.delay-5  { transition-delay: 0.5s; }
+.delay-6  { transition-delay: 0.6s; }
+
+/* =====================================================================
+   Hero — animated aurora gradient + floating shapes
+===================================================================== */
+.main-hero-area {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Aurora blobs */
+.main-hero-area::before,
+.main-hero-area::after {
+  content: "";
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+}
+.main-hero-area::before {
+  top: -180px;
+  right: -120px;
+  background: radial-gradient(circle at 30% 30%, var(--eh-accent), transparent 70%);
+  animation: eh-float-a 16s ease-in-out infinite;
+}
+.main-hero-area::after {
+  bottom: -200px;
+  left: -140px;
+  background: radial-gradient(circle at 60% 40%, var(--eh-accent-3), transparent 70%);
+  opacity: 0.35;
+  animation: eh-float-b 20s ease-in-out infinite;
+}
+
+/* Floating decorative orbs (span elements injected by enhance.js) */
+.eh-orb {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  border: 2px solid var(--eh-accent);
+}
+.eh-orb-1 { width: 70px; height: 70px; top: 18%;  left: 8%;  animation: eh-drift 9s ease-in-out infinite; }
+.eh-orb-2 { width: 120px; height: 120px; bottom: 16%; left: 42%; animation: eh-drift 12s ease-in-out infinite reverse; }
+.eh-orb-3 { width: 46px; height: 46px; top: 60%; right: 12%; animation: eh-drift 8s ease-in-out infinite; }
+
+@keyframes eh-float-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(40px, -30px) scale(1.12); }
+}
+@keyframes eh-float-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-50px, 40px) scale(1.1); }
+}
+@keyframes eh-drift {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-26px); }
+}
+
+/* Animated gradient text for highlighted spans in hero */
+.hero-content h1 b,
+.text-gradient {
+  background: linear-gradient(90deg, var(--eh-accent), var(--eh-accent-3), var(--eh-accent));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--eh-accent);
+  animation: eh-gradient-shift 5s linear infinite;
+}
+@keyframes eh-gradient-shift {
+  to { background-position: 200% center; }
+}
+
+/* Hero role line typed cursor */
+.eh-typed-wrap {
+  display: inline-block;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+.eh-typed-caret {
+  display: inline-block;
+  width: 2px;
+  margin-left: 2px;
+  background: var(--primary-color);
+  animation: eh-blink 0.8s step-end infinite;
+  vertical-align: baseline;
+}
+@keyframes eh-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* Author image — glow ring + gentle float + parallax hook */
+.author-image-part img {
+  transition: transform 0.6s var(--eh-ease);
+  will-change: transform;
+}
+.author-image-part .bg-circle {
+  background:
+    conic-gradient(from 0deg, var(--eh-accent), var(--eh-accent-3), var(--eh-accent));
+  animation: eh-spin-slow 18s linear infinite;
+}
+@keyframes eh-spin-slow {
+  to { transform: rotate(360deg); }
+}
+.author-image-part:hover img {
+  transform: scale(1.04) translateY(-6px);
+}
+
+/* =====================================================================
+   Header — glass + underline animated nav links
+===================================================================== */
+.main-header.menu-absolute .header-upper {
+  transition: background 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+}
+.main-header.fixed-header .header-upper {
+  background: color-mix(in srgb, var(--lighter-color) 82%, transparent) !important;
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.16);
+}
+
+/* Nav link hover underline */
+.main-header .navigation > li > a {
+  position: relative;
+}
+.main-header .navigation > li > a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary-color);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s var(--eh-ease);
+}
+.main-header .navigation > li > a:hover::after,
+.main-header .navigation > li > a.nav-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* =====================================================================
+   Buttons — shine sweep
+===================================================================== */
+.theme-btn,
+a.theme-btn {
+  position: relative;
+  overflow: hidden;
+}
+.theme-btn::after,
+a.theme-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s var(--eh-ease);
+}
+.theme-btn:hover::after,
+a.theme-btn:hover::after {
+  left: 125%;
+}
+
+/* =====================================================================
+   Cards — lift, glowing border, image zoom
+===================================================================== */
+.project-card,
+.skill-category,
+.service-item,
+.contact-info-card,
+.pricing-item {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.45s var(--eh-ease), box-shadow 0.45s var(--eh-ease), border-color 0.45s ease;
+}
+
+/* Glowing gradient border on hover */
+.project-card::before,
+.skill-category::before,
+.contact-info-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, var(--eh-accent), var(--eh-accent-3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+.project-card:hover::before,
+.skill-category:hover::before,
+.contact-info-card:hover::before {
+  opacity: 1;
+}
+
+.project-card:hover,
+.skill-category:hover,
+.contact-info-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 44px -18px var(--eh-glow);
+}
+
+.service-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -18px var(--eh-glow);
+}
+
+/* Image zoom on hover */
+.eh-zoom,
+.project-card img,
+.about-image-part img,
+.service-item img {
+  transition: transform 0.6s var(--eh-ease), filter 0.6s ease;
+}
+.eh-zoom:hover,
+.project-card:hover img,
+.about-image-part:hover img,
+.service-item:hover img {
+  transform: scale(1.08);
+}
+
+/* =====================================================================
+   Section titles — animated accent underline
+===================================================================== */
+.section-title .sub-title {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+.section-title h2 span {
+  background: linear-gradient(90deg, var(--eh-accent), var(--eh-accent-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =====================================================================
+   Counters
+===================================================================== */
+.eh-counter {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =====================================================================
+   Status badges — soft pulse
+===================================================================== */
+.status-badge {
+  position: relative;
+  overflow: hidden;
+}
+.status-badge::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  transform: translateY(-50%);
+  animation: eh-ping 1.6s ease-out infinite;
+}
+@keyframes eh-ping {
+  0%   { box-shadow: 0 0 0 0 var(--eh-glow); }
+  100% { box-shadow: 0 0 0 8px transparent; }
+}
+
+/* =====================================================================
+   Back to top — glow
+===================================================================== */
+.scroll-top {
+  right: 25px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  box-shadow: 0 8px 22px var(--eh-glow);
+}
+
+/* =====================================================================
+   Preloader — branded spinner (optional override)
+===================================================================== */
+.preloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #101014;
+}
+.preloader::after {
+  content: "";
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.14);
+  border-top-color: var(--primary-color);
+  border-right-color: var(--primary-color);
+  animation: eh-spin 0.8s linear infinite;
+}
+.preloader::before {
+  content: "";
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 1px dashed var(--primary-color);
+  opacity: 0.5;
+  animation: eh-spin 6s linear infinite reverse;
+}
+@keyframes eh-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =====================================================================
+   Cursor glow (desktop only)
+===================================================================== */
+.eh-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9990;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--eh-accent) 0%, transparent 65%);
+  opacity: 0.14;
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease;
+}
+.eh-cursor.is-hidden { opacity: 0; }
+@media (hover: none), (pointer: coarse) {
+  .eh-cursor { display: none; }
+}
+
+/* Motion-safe parallax target */
+[data-parallax] {
+  will-change: transform;
+}
+
+/* =====================================================================
+   Light theme refinements
+===================================================================== */
+html[data-theme="light"] .main-hero-area::before {
+  opacity: 0.35;
+}
+html[data-theme="light"] .main-hero-area::after {
+  opacity: 0.25;
+}
+html[data-theme="light"] .preloader {
+  background: #f6f7fb;
+}
+html[data-theme="light"] .preloader::after {
+  border-color: rgba(22, 22, 31, 0.14);
+  border-top-color: var(--primary-color);
+  border-right-color: var(--primary-color);
+}
+
+/* =====================================================================
+   Accessibility — respect reduced motion
+===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .reveal-up, .reveal-down, .reveal-left,
+  .reveal-right, .reveal-zoom, .reveal-flip, .reveal-blur {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .eh-cursor { display: none; }
+}
