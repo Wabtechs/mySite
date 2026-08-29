@@ -376,3 +376,177 @@ textarea:focus-visible {
   outline: 2px solid var(--theme-accent);
   outline-offset: 2px;
 }
+
+/* =====================================================================
+   Readability overrides — fix low-contrast text in each theme.
+   The base template hard-codes white/light colors (fine on its dark
+   canvas) and uses the dark purple for text accents. These overrides
+   keep every mode legible.
+   ===================================================================== */
+
+/* --- Shared: button text — white on the purple button in BOTH themes --- */
+.theme-btn,
+a.theme-btn {
+  color: #ffffff;
+}
+.theme-btn.style-two,
+a.theme-btn.style-two {
+  color: var(--base-color);
+}
+
+/* --- Dark theme: brighter violet for text accents on dark surfaces --- */
+html[data-theme="dark"] {
+  --text-accent: #c9a5ff;
+  --text-accent-link: #cdb3ff;
+}
+html[data-theme="dark"] .main-header .navigation a.nav-active,
+html[data-theme="dark"] .main-header .navigation li.current > a,
+html[data-theme="dark"] .breadcrumb-item.active,
+html[data-theme="dark"] .timeline-card .years,
+html[data-theme="dark"] .project-card .sub-title,
+html[data-theme="dark"] .project-card .status-badge,
+html[data-theme="dark"] .blog-category-tag,
+html[data-theme="dark"] .blog-date,
+html[data-theme="dark"] .blog-article code,
+html[data-theme="dark"] .filter-btns-one li.current {
+  color: var(--text-accent);
+}
+html[data-theme="dark"] .blog-category-tag {
+  background: color-mix(in srgb, var(--text-accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--text-accent) 38%, transparent);
+}
+html[data-theme="dark"] .project-card .status-badge {
+  background: color-mix(in srgb, var(--text-accent) 14%, transparent);
+}
+html[data-theme="dark"] .breadcrumb-item a {
+  color: var(--text-accent-link);
+}
+
+/* --- Light theme: white template text -> dark readable text --- */
+html[data-theme="light"] {
+  --theme-accent: #6d28d9;
+  --text-accent: #6d28d9;
+}
+
+/* Hero intro + paragraphs */
+html[data-theme="light"] .hero-content .h2,
+html[data-theme="light"] .hero-content h2 {
+  color: var(--heading-color);
+}
+html[data-theme="light"] .hero-content p {
+  color: var(--base-color);
+}
+
+/* "Lire la suite" / "Télécharger mon CV" text links (white in template) */
+html[data-theme="light"] .read-more {
+  color: var(--heading-color);
+}
+html[data-theme="light"] .read-more:hover {
+  color: var(--theme-accent);
+}
+
+/* Section eyebrow label (white in template) */
+html[data-theme="light"] .section-title .sub-title {
+  color: var(--theme-accent);
+  font-weight: 700;
+}
+
+/* Services index numbers (white in template) */
+html[data-theme="light"] .service-item .number {
+  color: var(--theme-accent);
+  opacity: 0.9;
+}
+
+/* Projects filter buttons (white/40 in template) */
+html[data-theme="light"] .filter-btns-one li {
+  color: var(--base-color);
+}
+html[data-theme="light"] .filter-btns-one li.current {
+  color: var(--theme-accent);
+}
+
+/* Generic white list rows (contact social list, etc.) */
+html[data-theme="light"] .list-style-one li {
+  color: var(--base-color);
+}
+html[data-theme="light"] .list-style-one li a,
+html[data-theme="light"] .list-style-one li a:hover {
+  color: var(--heading-color);
+}
+
+/* Contact form: labels + inputs (white in template) */
+html[data-theme="light"] .form-style-one .form-group label {
+  color: var(--heading-color);
+}
+html[data-theme="light"] .form-style-one .form-group .form-control {
+  color: var(--heading-color);
+  background: #ffffff;
+}
+html[data-theme="light"] .form-style-one .form-group .form-control::placeholder {
+  color: rgba(22, 22, 31, 0.45);
+}
+html[data-theme="light"] .form-style-one .form-group .form-control:focus {
+  background: #ffffff;
+  border-color: var(--theme-accent);
+}
+html[data-theme="light"] .form-style-one .form-group .for-icon {
+  color: rgba(22, 22, 31, 0.35);
+}
+
+/* Blog hero tag + meta on light banner */
+html[data-theme="light"] .blog-category-tag--hero {
+  color: var(--theme-accent);
+  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--theme-accent) 30%, transparent);
+}
+html[data-theme="light"] .blog-meta {
+  color: var(--base-color);
+}
+
+/* Contact info links on light cards */
+html[data-theme="light"] .contact-info-card a,
+html[data-theme="light"] .contact-info-card span {
+  color: var(--heading-color);
+}
+html[data-theme="light"] .contact-info-card h5 {
+  color: var(--heading-color);
+}
+
+/* --- Animated gradient accent text: theme-appropriate colors ---
+   The base gradient (dark purple -> cyan) is dim on dark and washes
+   out on light. Use richer stops so headings stay readable in both. */
+html[data-theme="dark"] .hero-content h1 b,
+html[data-theme="dark"] .text-gradient,
+html[data-theme="dark"] .section-title h2 span,
+html[data-theme="dark"] .service-item h4 span {
+  background: linear-gradient(90deg, #c9a5ff, #67e8f9, #c9a5ff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #c9a5ff;
+}
+html[data-theme="light"] .hero-content h1 b,
+html[data-theme="light"] .text-gradient,
+html[data-theme="light"] .section-title h2 span,
+html[data-theme="light"] .service-item h4 span {
+  background: linear-gradient(90deg, #6d28d9, #0d94e0, #6d28d9);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #6d28d9;
+}
+
+/* Footer is always dark: keep it dark in light mode but lift text contrast */
+html[data-theme="light"] .main-footer,
+html[data-theme="light"] .main-footer * {
+  color: #cfcfe2;
+}
+html[data-theme="light"] .main-footer a {
+  color: #cfcfe2;
+}
+html[data-theme="light"] .main-footer a:hover {
+  color: #ffffff;
+}
+

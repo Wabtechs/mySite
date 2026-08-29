@@ -27,38 +27,54 @@ Compatibilité **GitHub Pages** garantie (chemins relatifs, site déployé sous 
 mySite/
 │
 ├── index.html              → Accueil (hero, à propos, services, projets, contact)
-├── about.html              → À propos (vision, domaines)
-├── resume.html             → Parcours (formation, expériences)
-├── experience.html         → Expérience professionnelle (timeline)
-├── skills.html             → Compétences par catégorie
-├── services.html           → Services
-├── projects.html           → Projets + filtres
-├── project-bilengi.html    → Fiche projet Bilengi Marketplace
-├── project-myeduc360.html  → Fiche projet MyEduc360
-├── project-faktura.html    → Fiche projet FAKTURA
-├── blog.html               → Blog (en préparation)
-├── contact.html            → Contact (mailto)
 ├── 404.html                → Page d'erreur
+│
+├── pages/
+│   ├── about.html          → À propos (vision, domaines)
+│   ├── resume.html         → Parcours (formation, expériences)
+│   ├── experience.html     → Expérience professionnelle (timeline)
+│   ├── skills.html         → Compétences par catégorie
+│   ├── services.html       → Services
+│   ├── projects.html       → Projets + filtres
+│   ├── blog.html           → Blog (index)
+│   ├── contact.html        → Contact (mailto)
+│   │
+│   ├── projects/           → Fiches projets
+│   │   ├── project-bilengi.html
+│   │   ├── project-myeduc360.html
+│   │   └── project-faktura.html
+│   │
+│   └── blog/               → Articles de blog
+│       ├── blog-architecture-marketplace.html
+│       ├── blog-saas-modulaire.html
+│       ├── blog-design-system.html
+│       ├── blog-devops-cloud.html
+│       ├── blog-desktop-tauri.html
+│       └── blog-offline-first.html
 │
 ├── assets/
 │   ├── css/                → style.css (template), theme.css (design system), libs
 │   ├── js/                 → script.js (template), theme.js, navigation.js, libs
 │   ├── images/             → photos, projets, logos, icônes
+│   ├── cv/                 → Emmanuel_Mulonda_Johannes_CV.pdf (lien de téléchargement)
 │   └── fonts/              → polices
 │
+├── google05fbf13dc227bfa1.html → vérification Google Search Console
 ├── README.md
+├── LICENSE
 ├── sitemap.xml
 └── robots.txt
 ```
 
 ## Pages principales
 
-| Page       | Rôle                                            |
-|------------|-------------------------------------------------|
-| index.html | Comprendre le profil en moins de 30 secondes     |
-| projects   | Bilengi, MyEduc360, FAKTURA (statut : en développement) |
-| skills     | Frontend, Backend, BDD, DevOps/Infra, Ingénierie |
-| services   | Développement, digitalisation, gestion, plateformes, infra, maintenance |
+| Page            | Rôle                                        |
+|-----------------|---------------------------------------------|
+| index.html      | Comprendre le profil en moins de 30 secondes |
+| pages/projects  | Bilengi, MyEduc360, FAKTURA                |
+| pages/blog      | 6 articles techniques issus de la stack réelle |
+| pages/skills    | Frontend, Backend, BDD, DevOps/Infra, Ingénierie |
+| pages/services  | Développement, digitalisation, gestion, plateformes, infra, maintenance |
 
 ## Fonctionnement
 
@@ -93,10 +109,12 @@ URL publiée : **https://wabtechs.github.io/mySite/**
 
 - Contenu factuel uniquement (aucune donnée inventée)
 - HTML sémantique, `alt`, labels, focus visible, navigation clavier
-- SEO : titre, meta description/author/viewport par page, `sitemap.xml`, `robots.txt`
+- SEO : titre, meta description/author/viewport par page, URL canonique, balises Open Graph et Twitter Card, données structurées JSON-LD (Person, WebPage, BlogPosting), `sitemap.xml`, `robots.txt`, fichier de vérification Google
+- Thème clair/sombre lisible (contraste vérifié)
 - Responsive : vérifié de 320px à 1440px
-- Performance : JS/CSS minimisés autant que possible, images locales
+- Performance : JS/CSS minimisés autant que possible, images locales, polices embarquées
 
 ## Licence
 
 Ce dépôt est un portfolio personnel. Contenu et design © Emmanuel Mulonda Johannes.
+Voir le fichier [LICENSE](LICENSE).

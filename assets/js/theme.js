@@ -8,6 +8,20 @@
 
   var STORAGE_KEY = "mysite-theme";
 
+  // Resolve the URL to the site's assets/ folder relative to the current page.
+  // Works from any depth (root, pages/, pages/blog/, ...) by locating this script.
+  function assetsBase() {
+    var src = "";
+    document.querySelectorAll('script[src*="theme.js"]').forEach(function (s) {
+      src = s.getAttribute("src") || "";
+    });
+    if (!/\.js$/i.test(src)) {
+      return "assets/";
+    }
+    var base = src.replace(/js\/[^/]+\.js$/i, "");
+    return base;
+  }
+
   function getStored() {
     try {
       return localStorage.getItem(STORAGE_KEY);
@@ -39,17 +53,18 @@
 
   // Swap the website logo and favicon between dark/light variants.
   function updateBranding(theme) {
+    var base = assetsBase();
     var logo =
-      theme === "dark" ? "assets/images/logos/logo-dark.png" : "assets/images/logos/logo-light.png";
+      theme === "dark" ? base + "images/logos/logo-dark.png" : base + "images/logos/logo-light.png";
     var favicon =
-      theme === "dark" ? "assets/images/favicon-dark.png" : "assets/images/favicon-light.png";
+      theme === "dark" ? base + "images/favicon-dark.png" : base + "images/favicon-light.png";
 
     document
       .querySelectorAll(".logo img, .mobile-logo img, .footer-logo img")
       .forEach(function (img) {
         img.src = logo;
         img.onerror = function () {
-          img.src = "assets/images/logos/logo.png";
+          img.src = base + "images/logos/logo.png";
         };
       });
     document
