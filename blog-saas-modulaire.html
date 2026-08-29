@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Blog d'Emmanuel Mulonda Johannes — articles techniques sur architecture logicielle, développement web, DevOps, SaaS, marketplaces et solutions numériques.">
+    <meta name="description" content="Mettre en place une architecture SaaS modulaire avec authentification, organisations, rôles et permissions, abonnements et facturation — inspiré du Wabtechs SaaS Starter.">
     <meta name="author" content="Emmanuel Mulonda Johannes">
     <meta name="theme-color" content="#842ae3">
-    <title>Blog | Emmanuel Mulonda Johannes</title>
+    <title>Construire une plateforme SaaS modulaire : auth, rôles, facturation | Blog</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/flaticon.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
@@ -67,17 +67,20 @@
             </div>
         </header>
 
-        <!-- Page Banner -->
+        <!-- Article Banner -->
         <section class="page-banner-area pt-200 rpt-140 pb-100 rpb-60 rel z-1 text-center">
             <div class="container">
                 <div class="banner-inner text-white">
-                    <h1 class="page-title wow fadeInUp delay-0-2s">Blog</h1>
+                    <span class="blog-category-tag blog-category-tag--hero wow fadeInUp delay-0-1s">SaaS</span>
+                    <h1 class="page-title wow fadeInUp delay-0-2s">Construire une plateforme SaaS modulaire : auth, rôles, facturation</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center wow fadeInUp delay-0-4s">
                             <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-                            <li class="breadcrumb-item active">Blog</li>
+                            <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                            <li class="breadcrumb-item active">SaaS modulaire</li>
                         </ol>
                     </nav>
+                    <p class="blog-meta wow fadeInUp delay-0-5s"><i class="far fa-calendar-alt"></i> 2026 &nbsp;&middot;&nbsp; <i class="far fa-clock"></i> 9 min de lecture</p>
                 </div>
             </div>
             <div class="bg-lines">
@@ -86,100 +89,52 @@
             </div>
         </section>
 
-        <!-- Blog Articles -->
-        <section class="blog-area py-130 rpy-100 rel z-1">
+        <!-- Article Content -->
+        <section class="blog-detail-area py-130 rpy-100 rel z-1">
             <div class="container">
-                <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
-                    <span class="sub-title mb-15">Articles techniques</span>
-                    <h2>Derniers <span>articles</span></h2>
-                    <p>Réflexions et retours d'expérience sur l'architecture logicielle, le développement web, DevOps et les solutions numériques.</p>
-                </div>
-                <div class="row g-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
 
-                    <!-- Article 1 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Architecture</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-store"></i></div>
-                            <h3><a href="blog-architecture-marketplace.html">Architecture d'une marketplace multi-vendeurs moderne</a></h3>
-                            <p>Comment concevoir une plateforme e-commerce multi-vendeurs avec gestion du catalogue, commandes, paiements, KYC, feed social et dashboards — retour d'expérience basé sur Bilengi Marketplace.</p>
-                            <a href="blog-architecture-marketplace.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        <article class="blog-article wow fadeInUp delay-0-2s">
+
+                            <h2>1. Le socle : auth indépendante du métier</h2>
+                            L'authentification doit être pensée comme un module à part entière, indépendant des features métier. Plutôt que d'emmêler la logique d'inscription dans chaque écran, on centralise : inscription, connexion, déconnexion, réinitialisation de mot de passe et sessions.
+
+La séparation passe par une couche d'API claire combinée à des composants frontend réutilisables. Côté serveur, les tokens (JWT avec refresh tokens ou sessions gérées par le framework) sont émis par un service dédié. Côté client, un provider d'authentification expose un état global de session que toutes les pages consomment via un hook ou un contexte.
+
+                            <h2>2. Organisations et multi-tenant</h2>
+                            Le multi-tenant est le cœur d'un SaaS : chaque client (entreprise ou organisation) travaille dans son propre espace sans jamais voir les données des autres. Le modèle le plus simple et le plus sûr est une table <code>organizations</code> associée à une colonne <code>organization_id</code> sur chaque table métier.
+
+Le filtrage rigoureux par <code>organization_id</code> à chaque requête évite les fuites de données. L'isolation peut être renforcée avec des scopes d'ORM ou des policies de niveau base de données. Un utilisateur peut appartenir à plusieurs organisations, ce qui introduit la notion d'organisation "active" au niveau de la session.
+
+                            <h2>3. Rôles et permissions (RBAC)</h2>
+                            Le contrôle d'accès basé sur les rôles (RBAC) est essentiel pour gérer qui peut faire quoi. On distingue des rôles système (propriétaire, administrateur, membre) et des rôles personnalisables par organisation.
+
+La mise en place repose sur trois concepts : les <strong>rôles</strong> (ex. admin, éditeur, lecteur), les <strong>permissions</strong> (ex. créer un projet, supprimer un fichier) et les <strong>assignations</strong> (qui détient quel rôle où). En frontend, un hook d'autorisation vérifie la permission avant de rendre un bouton ou de bloquer une route, tandis que le backend re-vérifie toujours la permission en dernier ressort.
+
+                            <h2>4. Abonnements et facturation</h2>
+                            La facturation SaaS implique de lier les organisations à des plans et de gérer le cycle de souscription. Le modèle comprend : des <strong>plans</strong> (gratuit, pro, entreprise), des <strong>limites</strong> par plan (nombre d'utilisateurs, de projets), et un <strong>cycle de paiement</strong> (mensuel ou annuel).
+
+L'intégration de paiements doit rester déléguée à un fournisseur de paiement pour la conformité. Les webhooks de facturation mettent à jour l'état de l'abonnement (payé, impayé, annulé) et déclenchent les rétrogradations de limites. Une file de jobs asynchrone gère les rappels d'impayés et l'émission des factures PDF.
+
+                            <h2>5. Architecture technique recommandée</h2>
+                            <ul>
+  <li><strong>Frontend</strong> : Next.js (SSR/SSG), Tailwind CSS v4, shadcn/ui, TanStack Query pour les données, Zustand pour l'état global</li>
+  <li><strong>Backend</strong> : Node.js, API REST structurée, Drizzle ORM avec PostgreSQL, authentification JWT</li>
+  <li><strong>Files asynchrones</strong> : jobs en arrière-plan pour facturation, emails et notifications</li>
+  <li><strong>Infrastructure</strong> : Docker Compose en dev, Traefik en reverse proxy, déploiement Vercel ou conteneurs</li>
+</ul>
+
+                            <h2>Conclusion</h2>
+                            Un socle SaaS modulaire transforme une base de code en plateforme réutilisable. En isolant l'auth, le multi-tenant, le RBAC et la facturation du cœur métier, on peut ensuite bâtir plusieurs produits sur la même ossature sans réécrire les fondations. C'est exactement l'approche que je retiens avec le Wabtechs SaaS Starter : investir dans un socle solide pour accélérer chaque nouveau produit SaaS.
+
+                        </article>
+
+                        <div class="mt-5 d-flex gap-3 flex-wrap wow fadeInUp delay-0-2s">
+                            <a href="blog.html" class="theme-btn"><i class="far fa-angle-left"></i> Retour au blog</a>
+                            <a href="contact.html" class="read-more">Me contacter <i class="far fa-angle-right"></i></a>
                         </div>
                     </div>
-
-                    <!-- Article 2 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">SaaS</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cubes"></i></div>
-                            <h3><a href="blog-saas-modulaire.html">Construire une plateforme SaaS modulaire : auth, rôles, facturation</a></h3>
-                            <p>Mettre en place une architecture SaaS modulaire avec authentification, gestion des organisations, rôles et permissions, abonnements et facturation — inspiré du Wabtechs SaaS Starter.</p>
-                            <a href="blog-saas-modulaire.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 3 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Design System</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-palette"></i></div>
-                            <h3><a href="blog-design-system.html">Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI</a></h3>
-                            <p>Construire un design system réutilisable avec support dark/light mode, design tokens et composants accessibles grâce à Tailwind CSS v4, shadcn/ui et Radix UI.</p>
-                            <a href="blog-design-system.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 4 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">DevOps</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                            <h3><a href="blog-devops-cloud.html">Conteneurisation et déploiement Cloud : Docker, Traefik, Nginx, Vercel</a></h3>
-                            <p>De la conteneurisation Docker au déploiement production avec Traefik, Nginx et Vercel — comment structurer l'infrastructure cloud pour des applications modernes.</p>
-                            <a href="blog-devops-cloud.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 5 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Desktop</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-desktop"></i></div>
-                            <h3><a href="blog-desktop-tauri.html">Applications Desktop modernes avec Tauri, React et TypeScript</a></h3>
-                            <p>Créer des applications desktop performantes et légères avec Tauri, React et TypeScript, intégrant synchronisation Cloud et mode offline — inspiré d'Archivium.</p>
-                            <a href="blog-desktop-tauri.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 6 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Offline-First</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-wifi"></i></div>
-                            <h3><a href="blog-offline-first.html">Offline-first : concevoir pour les réseaux contraints</a></h3>
-                            <p>Stratégies et patterns pour construire des applications résilientes en environnements à connectivité limitée — retour d'expérience avec Wabtechs-LAN.</p>
-                            <a href="blog-offline-first.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="bg-lines">

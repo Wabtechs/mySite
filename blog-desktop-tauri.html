@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Blog d'Emmanuel Mulonda Johannes — articles techniques sur architecture logicielle, développement web, DevOps, SaaS, marketplaces et solutions numériques.">
+    <meta name="description" content="Créer des applications desktop performantes et légères avec Tauri, React et TypeScript, intégrant synchronisation Cloud et mode offline — inspiré d'Archivium.">
     <meta name="author" content="Emmanuel Mulonda Johannes">
     <meta name="theme-color" content="#842ae3">
-    <title>Blog | Emmanuel Mulonda Johannes</title>
+    <title>Applications Desktop modernes avec Tauri, React et TypeScript | Blog</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/flaticon.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
@@ -67,17 +67,20 @@
             </div>
         </header>
 
-        <!-- Page Banner -->
+        <!-- Article Banner -->
         <section class="page-banner-area pt-200 rpt-140 pb-100 rpb-60 rel z-1 text-center">
             <div class="container">
                 <div class="banner-inner text-white">
-                    <h1 class="page-title wow fadeInUp delay-0-2s">Blog</h1>
+                    <span class="blog-category-tag blog-category-tag--hero wow fadeInUp delay-0-1s">Desktop</span>
+                    <h1 class="page-title wow fadeInUp delay-0-2s">Applications Desktop modernes avec Tauri, React et TypeScript</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center wow fadeInUp delay-0-4s">
                             <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-                            <li class="breadcrumb-item active">Blog</li>
+                            <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                            <li class="breadcrumb-item active">Desktop Tauri</li>
                         </ol>
                     </nav>
+                    <p class="blog-meta wow fadeInUp delay-0-5s"><i class="far fa-calendar-alt"></i> 2026 &nbsp;&middot;&nbsp; <i class="far fa-clock"></i> 8 min de lecture</p>
                 </div>
             </div>
             <div class="bg-lines">
@@ -86,100 +89,54 @@
             </div>
         </section>
 
-        <!-- Blog Articles -->
-        <section class="blog-area py-130 rpy-100 rel z-1">
+        <!-- Article Content -->
+        <section class="blog-detail-area py-130 rpy-100 rel z-1">
             <div class="container">
-                <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
-                    <span class="sub-title mb-15">Articles techniques</span>
-                    <h2>Derniers <span>articles</span></h2>
-                    <p>Réflexions et retours d'expérience sur l'architecture logicielle, le développement web, DevOps et les solutions numériques.</p>
-                </div>
-                <div class="row g-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
 
-                    <!-- Article 1 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Architecture</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-store"></i></div>
-                            <h3><a href="blog-architecture-marketplace.html">Architecture d'une marketplace multi-vendeurs moderne</a></h3>
-                            <p>Comment concevoir une plateforme e-commerce multi-vendeurs avec gestion du catalogue, commandes, paiements, KYC, feed social et dashboards — retour d'expérience basé sur Bilengi Marketplace.</p>
-                            <a href="blog-architecture-marketplace.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        <article class="blog-article wow fadeInUp delay-0-2s">
+
+                            <h2>1. Pourquoi Tauri plutôt qu'Electron</h2>
+                            Tauri utilise le webview natif de chaque système (WebView2 sur Windows, WebKit sur macOS/Linux) au lieu d'embarquer un navigateur Chromium complet. Résultat : un binaire beaucoup plus léger, une empreinte mémoire réduite et un démarrage rapide.
+
+Le backend est écrit en Rust, ce qui offre des performances et une sécurité renforcées pour l'accès au système de fichiers et aux ressources locales. Pour le développeur web, la stack frontend reste identique : React, TypeScript, Tailwind CSS — on garde tout l'écosystème web.
+
+                            <h2>2. Une interface moderne avec React et TypeScript</h2>
+                            L'interface d'une application desktop Tauri se construit exactement comme une application web : composants React, state management, et design system multi-thèmes. Le mode sombre fonctionne naturellement puisque l'interface est du HTML/CSS.
+
+Grâce à la persistance locale soutenue par Tauri, l'application peut fonctionner entièrement hors-ligne : les données sont stockées en local (base de données légère ou fichier) et l'application reste utilisable sans connexion. C'est un point clé pour des outils de gestion documentaire comme Archivium.
+
+                            <h2>3. Intégration système et accès aux fichiers</h2>
+                            La puissance de Tauri réside dans les commandes backend Rust exposées au frontend. On peut accéder au système de fichiers, lire et écrire des documents, gérer l'ouverture de fichiers avec les associations système, et profiter de notifications natives.
+
+Cette couche permet de créer des expériences véritablement desktop : glisser-déposer de fichiers, intégration au menu système, raccourcis clavier globaux — tout ce qu'une application web classique ne peut pas faire, tout en gardant la simplicité du développement web.
+
+                            <h2>4. Synchronisation Cloud et mode offline</h2>
+                            Un point fort d'une application desktop moderne est la double capacité : travailler hors-ligne puis synchroniser quand la connexion revient. L'architecture suit un modèle "offline-first" :
+
+<ul>
+  <li>Les données sont modifiées localement d'abord, avec une file de changements en attente</li>
+  <li>À la reconnexion, les changements locaux sont poussés et les données du Cloud récupérées</li>
+  <li>La détection de conflits gère les modifications concurrentes sur le même document</li>
+</ul>
+<p>Cette approche, que j'applique à Archivium, offre une expérience fluide : l'utilisateur n'interrompt jamais son travail, même sans réseau, et ses données restent cohérentes une fois la synchronisation effectuée.</p>
+
+                            <h2>5. Packaging et distribution</h2>
+                            Tauri gère le packaging multiplateforme : on peut produire des installeurs natifs pour Windows (MSI/NSIS), macOS (DMG) et Linux (AppImage, deb). Le binaire est signé pour éviter les avertissements de sécurité.
+
+La mise à jour applicative est gérée avec un mécanisme de mise à jour automatique qui télécharge la nouvelle version et propose l'installation. Cela permet de distribuer des applications desktop de niveau professionnel avec un cycle de mise à jour aussi fluide que le web.
+
+                            <h2>Conclusion</h2>
+                            Tauri combine le meilleur de deux mondes : la vitesse de développement du web et les capacités natives du desktop. Avec React, TypeScript et un backend Rust, on obtient une application légère, performante, qui fonctionne hors-ligne et se synchronise avec le Cloud. C'est l'approche que je privilégie pour des outils desktop modernes comme Archivium.
+
+                        </article>
+
+                        <div class="mt-5 d-flex gap-3 flex-wrap wow fadeInUp delay-0-2s">
+                            <a href="blog.html" class="theme-btn"><i class="far fa-angle-left"></i> Retour au blog</a>
+                            <a href="contact.html" class="read-more">Me contacter <i class="far fa-angle-right"></i></a>
                         </div>
                     </div>
-
-                    <!-- Article 2 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">SaaS</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cubes"></i></div>
-                            <h3><a href="blog-saas-modulaire.html">Construire une plateforme SaaS modulaire : auth, rôles, facturation</a></h3>
-                            <p>Mettre en place une architecture SaaS modulaire avec authentification, gestion des organisations, rôles et permissions, abonnements et facturation — inspiré du Wabtechs SaaS Starter.</p>
-                            <a href="blog-saas-modulaire.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 3 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Design System</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-palette"></i></div>
-                            <h3><a href="blog-design-system.html">Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI</a></h3>
-                            <p>Construire un design system réutilisable avec support dark/light mode, design tokens et composants accessibles grâce à Tailwind CSS v4, shadcn/ui et Radix UI.</p>
-                            <a href="blog-design-system.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 4 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">DevOps</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                            <h3><a href="blog-devops-cloud.html">Conteneurisation et déploiement Cloud : Docker, Traefik, Nginx, Vercel</a></h3>
-                            <p>De la conteneurisation Docker au déploiement production avec Traefik, Nginx et Vercel — comment structurer l'infrastructure cloud pour des applications modernes.</p>
-                            <a href="blog-devops-cloud.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 5 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Desktop</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-desktop"></i></div>
-                            <h3><a href="blog-desktop-tauri.html">Applications Desktop modernes avec Tauri, React et TypeScript</a></h3>
-                            <p>Créer des applications desktop performantes et légères avec Tauri, React et TypeScript, intégrant synchronisation Cloud et mode offline — inspiré d'Archivium.</p>
-                            <a href="blog-desktop-tauri.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 6 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Offline-First</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-wifi"></i></div>
-                            <h3><a href="blog-offline-first.html">Offline-first : concevoir pour les réseaux contraints</a></h3>
-                            <p>Stratégies et patterns pour construire des applications résilientes en environnements à connectivité limitée — retour d'expérience avec Wabtechs-LAN.</p>
-                            <a href="blog-offline-first.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="bg-lines">

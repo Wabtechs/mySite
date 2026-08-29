@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Blog d'Emmanuel Mulonda Johannes — articles techniques sur architecture logicielle, développement web, DevOps, SaaS, marketplaces et solutions numériques.">
+    <meta name="description" content="Stratégies et patterns pour construire des applications résilientes en environnements à connectivité limitée — retour d'expérience avec Wabtechs-LAN.">
     <meta name="author" content="Emmanuel Mulonda Johannes">
     <meta name="theme-color" content="#842ae3">
-    <title>Blog | Emmanuel Mulonda Johannes</title>
+    <title>Offline-first : concevoir pour les réseaux contraints | Blog</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/flaticon.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
@@ -67,17 +67,20 @@
             </div>
         </header>
 
-        <!-- Page Banner -->
+        <!-- Article Banner -->
         <section class="page-banner-area pt-200 rpt-140 pb-100 rpb-60 rel z-1 text-center">
             <div class="container">
                 <div class="banner-inner text-white">
-                    <h1 class="page-title wow fadeInUp delay-0-2s">Blog</h1>
+                    <span class="blog-category-tag blog-category-tag--hero wow fadeInUp delay-0-1s">Offline-First</span>
+                    <h1 class="page-title wow fadeInUp delay-0-2s">Offline-first : concevoir pour les réseaux contraints</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center wow fadeInUp delay-0-4s">
                             <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-                            <li class="breadcrumb-item active">Blog</li>
+                            <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                            <li class="breadcrumb-item active">Offline-First</li>
                         </ol>
                     </nav>
+                    <p class="blog-meta wow fadeInUp delay-0-5s"><i class="far fa-calendar-alt"></i> 2026 &nbsp;&middot;&nbsp; <i class="far fa-clock"></i> 9 min de lecture</p>
                 </div>
             </div>
             <div class="bg-lines">
@@ -86,100 +89,53 @@
             </div>
         </section>
 
-        <!-- Blog Articles -->
-        <section class="blog-area py-130 rpy-100 rel z-1">
+        <!-- Article Content -->
+        <section class="blog-detail-area py-130 rpy-100 rel z-1">
             <div class="container">
-                <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
-                    <span class="sub-title mb-15">Articles techniques</span>
-                    <h2>Derniers <span>articles</span></h2>
-                    <p>Réflexions et retours d'expérience sur l'architecture logicielle, le développement web, DevOps et les solutions numériques.</p>
-                </div>
-                <div class="row g-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
 
-                    <!-- Article 1 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Architecture</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-store"></i></div>
-                            <h3><a href="blog-architecture-marketplace.html">Architecture d'une marketplace multi-vendeurs moderne</a></h3>
-                            <p>Comment concevoir une plateforme e-commerce multi-vendeurs avec gestion du catalogue, commandes, paiements, KYC, feed social et dashboards — retour d'expérience basé sur Bilengi Marketplace.</p>
-                            <a href="blog-architecture-marketplace.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        <article class="blog-article wow fadeInUp delay-0-2s">
+
+                            <h2>1. L'état d'esprit offline-first</h2>
+                            Le principe "offline-first" inverse la logique traditionnelle : on ne part pas d'une application connectée à laquelle on ajoute un mode hors-ligne. On conçoit d'emblée une application qui fonctionne sans réseau, la connectivité ne servant qu'à la synchronisation.
+
+Concrètement : toute lecture passe par un cache local d'abord, toute écriture aboutit d'abord localement, et le réseau n'intervient que pour mettre à jour les données partagées. L'utilisateur ne voit jamais d'écran bloqué ou d'erreur de connexion ; au pire, un indicateur discret signale une synchronisation en attente.
+
+                            <h2>2. Un stockage local résilient</h2>
+                            Le fondement technique est un stockage local fiable. Pour les données structurées, une base embarquée (SQLite, IndexedDB) conserve les enregistrements entre les sessions, avec des métadonnées de synchronisation (horodatage, statut).
+
+Le cache comprend aussi les assets : polices, images, scripts, pour que l'application se charge entièrement hors-ligne. Une stratégie de cache (cache-first pour les assets immuables, network-first puis fallback cache pour les pages) optimise la vitesse tout en garantissant la disponibilité.
+
+                            <h2>3. Synchronisation et file de changements</h2>
+                            Pour les écritures effectuées hors-ligne, on maintient une file de changements en attente. À chaque modification locale, une entrée est ajoutée à la file avec sa date et son contenu.
+
+À la reconnexion, le client pousse les changements dans l'ordre et récupère les mises à jour distantes. La synchronisation peut être déclenchée par un événement (reconnexion, action utilisateur) ou planifiée. Si un envoi échoue, la file conserve le changement et le réessaie plutôt que de perdre la donnée.
+
+                            <h2>4. Détection de conflits et convergence</h2>
+                            Quand deux appareils modifient la même donnée hors-ligne, il faut une stratégie de résolution. L'approche la plus simple est "last-write-wins" (la dernière écriture gagne), adaptée aux données simples. Pour les champs critiques, on peut gérer des versions par champ ou proposer une fusion.
+
+Un mécanisme de mise à jour idempotent garantit que la synchronisation reste cohérente même si elle est interrompue et reprise. L'objectif est que tous les appareils convergent vers le même état sans perdre de données.
+
+                            <h2>5. Mise en pratique sur des réseaux contraints</h2>
+                            <ul>
+  <li><strong>Minimiser la taille des transferts</strong> : compression, requêtes paginées, un seul payload consolidé</li>
+  <li><strong>Prioriser la synchronisation</strong> : les données critiques d'abord, le reste en arrière-plan</li>
+  <li><strong>Gérer l'instabilité</strong> : reprise sur interruption, tentatives avec backoff, indicateur d'état réseau</li>
+  <li><strong>Offrir un mode local complet</strong> : l'application entière reste utilisable, y compris les fonctionnalités de lecture et d'édition</li>
+</ul>
+<p>C'est précisément l'approche que je déploie avec Wabtechs-LAN, où la disponibilité locale prime et où la synchronisation s'adapte aux réseaux contraints et instables.</p>
+
+                            <h2>Conclusion</h2>
+                            Concevoir offline-first est une exigence de robustesse autant qu'un confort utilisateur. En rendant le stockage local fiable, les écritures asynchrones et la synchronisation tolérante aux pannes, on construit des applications qui restent utiles partout, même là où la connexion est capricieuse. C'est un pattern que je considère comme essentiel pour les outils destinés à des environnements à connectivité limitée.
+
+                        </article>
+
+                        <div class="mt-5 d-flex gap-3 flex-wrap wow fadeInUp delay-0-2s">
+                            <a href="blog.html" class="theme-btn"><i class="far fa-angle-left"></i> Retour au blog</a>
+                            <a href="contact.html" class="read-more">Me contacter <i class="far fa-angle-right"></i></a>
                         </div>
                     </div>
-
-                    <!-- Article 2 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">SaaS</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cubes"></i></div>
-                            <h3><a href="blog-saas-modulaire.html">Construire une plateforme SaaS modulaire : auth, rôles, facturation</a></h3>
-                            <p>Mettre en place une architecture SaaS modulaire avec authentification, gestion des organisations, rôles et permissions, abonnements et facturation — inspiré du Wabtechs SaaS Starter.</p>
-                            <a href="blog-saas-modulaire.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 3 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Design System</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-palette"></i></div>
-                            <h3><a href="blog-design-system.html">Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI</a></h3>
-                            <p>Construire un design system réutilisable avec support dark/light mode, design tokens et composants accessibles grâce à Tailwind CSS v4, shadcn/ui et Radix UI.</p>
-                            <a href="blog-design-system.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 4 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">DevOps</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                            <h3><a href="blog-devops-cloud.html">Conteneurisation et déploiement Cloud : Docker, Traefik, Nginx, Vercel</a></h3>
-                            <p>De la conteneurisation Docker au déploiement production avec Traefik, Nginx et Vercel — comment structurer l'infrastructure cloud pour des applications modernes.</p>
-                            <a href="blog-devops-cloud.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 5 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Desktop</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-desktop"></i></div>
-                            <h3><a href="blog-desktop-tauri.html">Applications Desktop modernes avec Tauri, React et TypeScript</a></h3>
-                            <p>Créer des applications desktop performantes et légères avec Tauri, React et TypeScript, intégrant synchronisation Cloud et mode offline — inspiré d'Archivium.</p>
-                            <a href="blog-desktop-tauri.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 6 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Offline-First</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-wifi"></i></div>
-                            <h3><a href="blog-offline-first.html">Offline-first : concevoir pour les réseaux contraints</a></h3>
-                            <p>Stratégies et patterns pour construire des applications résilientes en environnements à connectivité limitée — retour d'expérience avec Wabtechs-LAN.</p>
-                            <a href="blog-offline-first.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="bg-lines">

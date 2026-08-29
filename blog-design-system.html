@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Blog d'Emmanuel Mulonda Johannes — articles techniques sur architecture logicielle, développement web, DevOps, SaaS, marketplaces et solutions numériques.">
+    <meta name="description" content="Construire un design system réutilisable avec support dark/light mode, design tokens et composants accessibles grâce à Tailwind CSS v4, shadcn/ui et Radix UI.">
     <meta name="author" content="Emmanuel Mulonda Johannes">
     <meta name="theme-color" content="#842ae3">
-    <title>Blog | Emmanuel Mulonda Johannes</title>
+    <title>Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI | Blog</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/flaticon.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
@@ -67,17 +67,20 @@
             </div>
         </header>
 
-        <!-- Page Banner -->
+        <!-- Article Banner -->
         <section class="page-banner-area pt-200 rpt-140 pb-100 rpb-60 rel z-1 text-center">
             <div class="container">
                 <div class="banner-inner text-white">
-                    <h1 class="page-title wow fadeInUp delay-0-2s">Blog</h1>
+                    <span class="blog-category-tag blog-category-tag--hero wow fadeInUp delay-0-1s">Design System</span>
+                    <h1 class="page-title wow fadeInUp delay-0-2s">Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center wow fadeInUp delay-0-4s">
                             <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-                            <li class="breadcrumb-item active">Blog</li>
+                            <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                            <li class="breadcrumb-item active">Design System</li>
                         </ol>
                     </nav>
+                    <p class="blog-meta wow fadeInUp delay-0-5s"><i class="far fa-calendar-alt"></i> 2026 &nbsp;&middot;&nbsp; <i class="far fa-clock"></i> 8 min de lecture</p>
                 </div>
             </div>
             <div class="bg-lines">
@@ -86,100 +89,49 @@
             </div>
         </section>
 
-        <!-- Blog Articles -->
-        <section class="blog-area py-130 rpy-100 rel z-1">
+        <!-- Article Content -->
+        <section class="blog-detail-area py-130 rpy-100 rel z-1">
             <div class="container">
-                <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
-                    <span class="sub-title mb-15">Articles techniques</span>
-                    <h2>Derniers <span>articles</span></h2>
-                    <p>Réflexions et retours d'expérience sur l'architecture logicielle, le développement web, DevOps et les solutions numériques.</p>
-                </div>
-                <div class="row g-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
 
-                    <!-- Article 1 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Architecture</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-store"></i></div>
-                            <h3><a href="blog-architecture-marketplace.html">Architecture d'une marketplace multi-vendeurs moderne</a></h3>
-                            <p>Comment concevoir une plateforme e-commerce multi-vendeurs avec gestion du catalogue, commandes, paiements, KYC, feed social et dashboards — retour d'expérience basé sur Bilengi Marketplace.</p>
-                            <a href="blog-architecture-marketplace.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        <article class="blog-article wow fadeInUp delay-0-2s">
+
+                            <h2>1. Les design tokens comme source de vérité</h2>
+                            Un design system commence par les design tokens : couleurs, typographie, espacements, rayons, ombres et transitions. Ces valeurs sont définies une seule fois et référencées partout.
+
+Avec Tailwind CSS v4, on déclare ces tokens dans la configuration du thème. En utilisant des variables CSS (<code>--color-primary</code>, <code>--color-background</code>…), on découple la valeur de son usage : changer la valeur d'une variable suffit à changer tout le thème, ce qui est la base du support dark/light.
+
+                            <h2>2. Support dark/light via variables CSS</h2>
+                            Le mode sombre n'est pas une coquille de styles ajoutés par-dessus : c'est un jeu de tokens alternatif. La technique consiste à définir les variables CSS pour le thème clair sur <code>:root</code>, puis à redéfinir les mêmes variables sous un sélecteur sombre (classe <code>.dark</code> sur l'élément <code>html</code>).
+
+Les composants ne référencent plus jamais de couleur en dur : ils utilisent les variables. Ainsi, basculer le thème se résume à permuter la valeur des variables, sans toucher aux composants. Un bouton, un fond de carte ou un input réagissent instantanément et de manière cohérente.
+
+                            <h2>3. Composants accessibles avec Radix UI</h2>
+                            Radix UI fournit la logique d'accessibilité des composants interactifs : comportement clavier, gestion du focus, relations ARIA, gestion des popovers et dialogues. C'est la couche de comportement, sans style imposé.
+
+Pour chaque composant (bouton, menu, modal, tooltip, select…), on assemble le primitif Radix avec des styles Tailwind. Le résultat est à la fois accessible et visuellement cohérent, et le thème sombre fonctionne d'office car les styles passent par les tokens.
+
+                            <h2>4. shadcn/ui : des composants copiés, pas une dépendance</h2>
+                            L'approche de shadcn/ui inverse la logique habituelle : au lieu d'importer une bibliothèque monolithique, on génère le code source des composants directement dans le projet. Chaque composant est ainsi copiable, modifiable et adapté localement.
+
+Cette philosophie est idéale pour un design system réutilisable : on possède le code, on partage les tokens, et chaque projet garde la liberté d'ajuster sans attendre une mise à jour de bibliothèque. Le mode sombre est naturellement supporté puisque les composants utilisent les variables de thème.
+
+                            <h2>5. Structure et réutilisation</h2>
+                            Pour que le design system profite à plusieurs projets, je le structure comme un package partagé : le thème Tailwind (tokens), les composants UI de base, et quelques patterns métier réutilisables. Un guide de style documente chaque composant avec ses variantes et son comportement en mode sombre.
+
+Cette approche garantit une cohérence entre applications tout en restant légère et sans verrouillage de bibliothèque. Le résultat est un système que je réutilise sur l'ensemble de mes projets web, des marketplaces aux SaaS.
+
+                            <h2>Conclusion</h2>
+                            Un design system multi-thèmes est un investissement qui paie sur chaque projet. Avec Tailwind CSS v4 pour les tokens et utilitaires, Radix UI pour l'accessibilité et shadcn/ui pour des composants copiables, on obtient un socle souple, accessible et véritablement multi-thème. C'est le fondement sur lequel je construis des interfaces modernes et cohérentes.
+
+                        </article>
+
+                        <div class="mt-5 d-flex gap-3 flex-wrap wow fadeInUp delay-0-2s">
+                            <a href="blog.html" class="theme-btn"><i class="far fa-angle-left"></i> Retour au blog</a>
+                            <a href="contact.html" class="read-more">Me contacter <i class="far fa-angle-right"></i></a>
                         </div>
                     </div>
-
-                    <!-- Article 2 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">SaaS</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cubes"></i></div>
-                            <h3><a href="blog-saas-modulaire.html">Construire une plateforme SaaS modulaire : auth, rôles, facturation</a></h3>
-                            <p>Mettre en place une architecture SaaS modulaire avec authentification, gestion des organisations, rôles et permissions, abonnements et facturation — inspiré du Wabtechs SaaS Starter.</p>
-                            <a href="blog-saas-modulaire.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 3 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Design System</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-palette"></i></div>
-                            <h3><a href="blog-design-system.html">Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI</a></h3>
-                            <p>Construire un design system réutilisable avec support dark/light mode, design tokens et composants accessibles grâce à Tailwind CSS v4, shadcn/ui et Radix UI.</p>
-                            <a href="blog-design-system.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 4 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">DevOps</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                            <h3><a href="blog-devops-cloud.html">Conteneurisation et déploiement Cloud : Docker, Traefik, Nginx, Vercel</a></h3>
-                            <p>De la conteneurisation Docker au déploiement production avec Traefik, Nginx et Vercel — comment structurer l'infrastructure cloud pour des applications modernes.</p>
-                            <a href="blog-devops-cloud.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 5 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-2s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Desktop</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-desktop"></i></div>
-                            <h3><a href="blog-desktop-tauri.html">Applications Desktop modernes avec Tauri, React et TypeScript</a></h3>
-                            <p>Créer des applications desktop performantes et légères avec Tauri, React et TypeScript, intégrant synchronisation Cloud et mode offline — inspiré d'Archivium.</p>
-                            <a href="blog-desktop-tauri.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Article 6 -->
-                    <div class="col-lg-6">
-                        <div class="blog-card wow fadeInUp delay-0-3s">
-                            <div class="blog-card-header">
-                                <span class="blog-category-tag">Offline-First</span>
-                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
-                            </div>
-                            <div class="blog-card-icon"><i class="fas fa-wifi"></i></div>
-                            <h3><a href="blog-offline-first.html">Offline-first : concevoir pour les réseaux contraints</a></h3>
-                            <p>Stratégies et patterns pour construire des applications résilientes en environnements à connectivité limitée — retour d'expérience avec Wabtechs-LAN.</p>
-                            <a href="blog-offline-first.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="bg-lines">
