@@ -7,7 +7,7 @@
   function init() {
     var current = window.location.pathname.split("/").pop() || "index.html";
 
-    if (current === "" ) {
+    if (current === "") {
       current = "index.html";
     }
 

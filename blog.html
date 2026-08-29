@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Blog d'Emmanuel Mulonda Johannes — développement, technologie, infrastructure, digitalisation, entrepreneuriat numérique et réflexions.">
+    <meta name="description" content="Blog d'Emmanuel Mulonda Johannes — articles techniques sur architecture logicielle, développement web, DevOps, SaaS, marketplaces et solutions numériques.">
     <meta name="author" content="Emmanuel Mulonda Johannes">
     <meta name="theme-color" content="#842ae3">
     <title>Blog | Emmanuel Mulonda Johannes</title>
@@ -51,7 +51,7 @@
                                         <li><a href="skills.html">Skills</a></li>
                                         <li><a href="services.html">Services</a></li>
                                         <li><a href="projects.html">Projects</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
+                                        <li><a href="blog.html" class="nav-active">Blog</a></li>
                                         <li><a href="contact.html">Contact</a></li>
                                     </ul>
                                 </div>
@@ -86,58 +86,100 @@
             </div>
         </section>
 
-        <!-- Blog -->
+        <!-- Blog Articles -->
         <section class="blog-area py-130 rpy-100 rel z-1">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xl-7 col-lg-8">
-                        <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
-                            <span class="sub-title mb-15">Blog</span>
-                            <h2>Catégories du <span>blog</span></h2>
-                            <p>Cette section est en cours de préparation. Les articles seront publiés prochainement.</p>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-sm-4">
-                                <div class="skill-category wow fadeInUp delay-0-2s">
-                                    <div class="skill-cat-icon"><i class="fas fa-code"></i></div>
-                                    <h4>Développement</h4>
-                                </div>
+                <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
+                    <span class="sub-title mb-15">Articles techniques</span>
+                    <h2>Derniers <span>articles</span></h2>
+                    <p>Réflexions et retours d'expérience sur l'architecture logicielle, le développement web, DevOps et les solutions numériques.</p>
+                </div>
+                <div class="row g-4">
+
+                    <!-- Article 1 -->
+                    <div class="col-lg-6">
+                        <div class="blog-card wow fadeInUp delay-0-2s">
+                            <div class="blog-card-header">
+                                <span class="blog-category-tag">Architecture</span>
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="skill-category wow fadeInUp delay-0-3s">
-                                    <div class="skill-cat-icon"><i class="fas fa-microchip"></i></div>
-                                    <h4>Technologie</h4>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="skill-category wow fadeInUp delay-0-4s">
-                                    <div class="skill-cat-icon"><i class="fas fa-server"></i></div>
-                                    <h4>Infrastructure</h4>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="skill-category wow fadeInUp delay-0-2s">
-                                    <div class="skill-cat-icon"><i class="fas fa-digital-tiling"></i></div>
-                                    <h4>Digitalisation</h4>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="skill-category wow fadeInUp delay-0-3s">
-                                    <div class="skill-cat-icon"><i class="fas fa-rocket"></i></div>
-                                    <h4>Entrepreneuriat numérique</h4>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="skill-category wow fadeInUp delay-0-4s">
-                                    <div class="skill-cat-icon"><i class="fas fa-lightbulb"></i></div>
-                                    <h4>Réflexions</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-5 text-center">
-                            <div class="template-note">Les premiers articles seront publiés prochainement.</div>
+                            <div class="blog-card-icon"><i class="fas fa-store"></i></div>
+                            <h3><a href="blog-architecture-marketplace.html">Architecture d'une marketplace multi-vendeurs moderne</a></h3>
+                            <p>Comment concevoir une plateforme e-commerce multi-vendeurs avec gestion du catalogue, commandes, paiements, KYC, feed social et dashboards — retour d'expérience basé sur Bilengi Marketplace.</p>
+                            <a href="blog-architecture-marketplace.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
                         </div>
                     </div>
+
+                    <!-- Article 2 -->
+                    <div class="col-lg-6">
+                        <div class="blog-card wow fadeInUp delay-0-3s">
+                            <div class="blog-card-header">
+                                <span class="blog-category-tag">SaaS</span>
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
+                            </div>
+                            <div class="blog-card-icon"><i class="fas fa-cubes"></i></div>
+                            <h3><a href="blog.html">Construire une plateforme SaaS modulaire : auth, rôles, facturation</a></h3>
+                            <p>Mettre en place une architecture SaaS modulaire avec authentification, gestion des organisations, rôles et permissions, abonnements et facturation — inspiré du Wabtechs SaaS Starter.</p>
+                            <a href="blog.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Article 3 -->
+                    <div class="col-lg-6">
+                        <div class="blog-card wow fadeInUp delay-0-2s">
+                            <div class="blog-card-header">
+                                <span class="blog-category-tag">Design System</span>
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
+                            </div>
+                            <div class="blog-card-icon"><i class="fas fa-palette"></i></div>
+                            <h3><a href="blog.html">Design System multi-thèmes avec Tailwind CSS, shadcn/ui et Radix UI</a></h3>
+                            <p>Construire un design system réutilisable avec support dark/light mode, design tokens et composants accessibles grâce à Tailwind CSS v4, shadcn/ui et Radix UI.</p>
+                            <a href="blog.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Article 4 -->
+                    <div class="col-lg-6">
+                        <div class="blog-card wow fadeInUp delay-0-3s">
+                            <div class="blog-card-header">
+                                <span class="blog-category-tag">DevOps</span>
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
+                            </div>
+                            <div class="blog-card-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                            <h3><a href="blog.html">Conteneurisation et déploiement Cloud : Docker, Traefik, Nginx, Vercel</a></h3>
+                            <p>De la conteneurisation Docker au déploiement production avec Traefik, Nginx et Vercel — comment structurer l'infrastructure cloud pour des applications modernes.</p>
+                            <a href="blog.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Article 5 -->
+                    <div class="col-lg-6">
+                        <div class="blog-card wow fadeInUp delay-0-2s">
+                            <div class="blog-card-header">
+                                <span class="blog-category-tag">Desktop</span>
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
+                            </div>
+                            <div class="blog-card-icon"><i class="fas fa-desktop"></i></div>
+                            <h3><a href="blog.html">Applications Desktop modernes avec Tauri, React et TypeScript</a></h3>
+                            <p>Créer des applications desktop performantes et légères avec Tauri, React et TypeScript, intégrant synchronisation Cloud et mode offline — inspiré d'Archivium.</p>
+                            <a href="blog.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Article 6 -->
+                    <div class="col-lg-6">
+                        <div class="blog-card wow fadeInUp delay-0-3s">
+                            <div class="blog-card-header">
+                                <span class="blog-category-tag">Offline-First</span>
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> 2026</span>
+                            </div>
+                            <div class="blog-card-icon"><i class="fas fa-wifi"></i></div>
+                            <h3><a href="blog.html">Offline-first : concevoir pour les réseaux contraints</a></h3>
+                            <p>Stratégies et patterns pour construire des applications résilientes en environnements à connectivité limitée — retour d'expérience avec Wabtechs-LAN.</p>
+                            <a href="blog.html" class="read-more">Lire la suite <i class="far fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="bg-lines">
@@ -176,7 +218,7 @@
                                 <h6 class="footer-title">Contact</h6>
                                 <ul>
                                     <li><i class="far fa-map-marker-alt"></i> Kinshasa, RD Congo</li>
-                                    <li><i class="far fa-envelope"></i> <a href="mailto:contact@wabtechs.com">contact@wabtechs.com</a></li>
+                                    <li><i class="far fa-envelope"></i> <a href="mailto:emmanuel.mulonda@email.com">emmanuel.mulonda@email.com</a></li>
                                     <li><i class="far fa-phone"></i> <a href="tel:+243850060060">+243 850 060 060</a></li>
                                 </ul>
                             </div>
@@ -189,7 +231,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="copyright-text">
-                                <p>© 2026 Emmanuel Mulonda Johannes. Tous droits réservés.</p>
+                                <p>&copy; 2026 Emmanuel Mulonda Johannes. Tous droits réservés.</p>
                             </div>
                         </div>
                         <div class="col-lg-6 text-lg-end">

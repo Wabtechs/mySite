@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Services d'Emmanuel Mulonda Johannes — développement logiciel, digitalisation, applications de gestion, plateformes, infrastructure et maintenance.">
+    <meta name="description" content="Architecture d'une marketplace multi-vendeurs moderne — retour d'expérience sur la conception d'une plateforme e-commerce avec catalogue, commandes, paiements, KYC, feed social et dashboards.">
     <meta name="author" content="Emmanuel Mulonda Johannes">
     <meta name="theme-color" content="#842ae3">
-    <title>Services | Emmanuel Mulonda Johannes</title>
+    <title>Architecture d'une marketplace multi-vendeurs moderne | Blog</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/flaticon.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome-5.14.0.min.css">
@@ -51,7 +51,7 @@
                                         <li><a href="skills.html">Skills</a></li>
                                         <li><a href="services.html">Services</a></li>
                                         <li><a href="projects.html">Projects</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
+                                        <li><a href="blog.html" class="nav-active">Blog</a></li>
                                         <li><a href="contact.html">Contact</a></li>
                                     </ul>
                                 </div>
@@ -67,17 +67,20 @@
             </div>
         </header>
 
-        <!-- Page Banner -->
+        <!-- Article Banner -->
         <section class="page-banner-area pt-200 rpt-140 pb-100 rpb-60 rel z-1 text-center">
             <div class="container">
                 <div class="banner-inner text-white">
-                    <h1 class="page-title wow fadeInUp delay-0-2s">Mes services</h1>
+                    <span class="blog-category-tag blog-category-tag--hero wow fadeInUp delay-0-1s">Architecture</span>
+                    <h1 class="page-title wow fadeInUp delay-0-2s">Architecture d'une marketplace multi-vendeurs moderne</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center wow fadeInUp delay-0-4s">
                             <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-                            <li class="breadcrumb-item active">Services</li>
+                            <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                            <li class="breadcrumb-item active">Architecture marketplace</li>
                         </ol>
                     </nav>
+                    <p class="blog-meta wow fadeInUp delay-0-5s"><i class="far fa-calendar-alt"></i> 2026 &nbsp;&middot;&nbsp; <i class="far fa-clock"></i> 10 min de lecture</p>
                 </div>
             </div>
             <div class="bg-lines">
@@ -86,81 +89,71 @@
             </div>
         </section>
 
-        <!-- Services -->
-        <section class="services-area pt-130 rpt-100 pb-100 rpb-70 rel z-1">
+        <!-- Article Content -->
+        <section class="blog-detail-area py-130 rpy-100 rel z-1">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-xl-6 col-lg-8">
-                        <div class="section-title text-center mb-60 wow fadeInUp delay-0-2s">
-                            <span class="sub-title mb-15">Services</span>
-                            <h2>Des services <span>cohérents</span> avec mon profil</h2>
+                    <div class="col-lg-9">
+
+                        <article class="blog-article wow fadeInUp delay-0-2s">
+
+                            <p class="blog-article-lead">Concevoir une marketplace multi-vendeurs est un exercice d'architecture complexe. Au-delà de la simple mise en relation offre/demande, il faut gérer un écosystème complet : catalogue produits, commandes, paiements, vérification des vendeurs, messagerie, notifications, feed social et dashboards. Voici comment j'aborde cette architecture en m'appuyant sur les leçons tirées de Bilengi Marketplace.</p>
+
+                            <h2>1. Le noyau : le modèle multi-vendeurs</h2>
+                            <p>Contrairement à un e-commerce classique où un seul vendeur gère tout le catalogue, une marketplace doit isoler proprement les données de chaque vendeur. Chaque vendeur possède son propre espace, ses produits, ses commandes et ses statistiques. La première décision architecturale est de choisir entre un modèle de bases de données séparées par vendeur ou un modèle partagé avec filtrage strict par <code>vendor_id</code>.</p>
+                            <p>Le modèle partagé avec colonne <code>vendor_id</code> sur chaque table est généralement plus adapté aux marketplaces de taille moyenne. Il simplifie les jointures et les requêtes cross-vendor nécessaires au dashboard admin, tout en permettant un filtrage rigoureux au niveau des requêtes côté vendeur. L'utilisation d'un ORM comme Drizzle ou Prisma avec des scopes.rowLevelSecurity rend cette isolation transparente.</p>
+
+                            <h2>2. Gestion du catalogue et des produits</h2>
+                            <p>Le catalogue est le cœur de la marketplace. Chaque vendeur ajoute, modifie et supprime ses produits. La structure typique comprend :</p>
+                            <ul>
+                                <li><strong>Produits</strong> — titre, description, prix, catégories, attributs variables (taille, couleur…), images multiples</li>
+                                <li><strong>Catégories et sous-catégories</strong> — arbre hiérarchique avec slugs pour le SEO</li>
+                                <li><strong>Inventaire</strong> — gestion des stocks par variante, alertes de rupture</li>
+                                <li><strong>Modération</strong> — validation avant publication pour garantir la qualité du catalogue</li>
+                            </ul>
+                            <p>L'upload d'images doit passer par un service de stockage objet (S3 ou Cloudflare R2) avec transformation automatique des images pour différentes résolutions. Un pipeline de traitement redimensionne les images à la volée selon les besoins (thumbnail, galerie, zoom).</p>
+
+                            <h2>3. Le parcours de commande</h2>
+                            <p>Le flux de commande dans une marketplace multi-vendeurs est plus complexe que dans un e-commerce standard. Une commande peut contenir des produits provenant de plusieurs vendeurs, ce qui impose de :</p>
+                            <ul>
+                                <li><strong>Spliter la commande</strong> en sous-commandes par vendeur lors de la validation</li>
+                                <li><strong>Gérer les paiements</strong> — encaisser le montant total, puis répartir les fonds après commission</li>
+                                <li><strong>Calculer les frais</strong> — commission marketplace sur chaque transaction</li>
+                                <li><strong>Suivre la livraison</strong> — chaque vendeur gère sa propre expédition</li>
+                            </ul>
+                            <p>L'utilisation de TanStack Query côté frontend permet de gérer proprement le cache des états de commande et les mises à jour optimistes quand un vendeur change le statut d'une commande.</p>
+
+                            <h2>4. Paiements et KYC</h2>
+                            <p>Le système de paiement doit gérer deux flux distincts : le paiement de l'acheteur et le virement au vendeur. Pour le marché africain, il faut intégrer mobile money (M-Pesa, Airtel Money) en plus des cartes bancaires. Le KYC (Know Your Customer) est essentiel pour les vendeurs : vérification d'identité, documents commerciaux, et validation avant activation du compte vendeur.</p>
+                            <p>Les données sensibles de paiement ne doivent jamais transiter par le serveur applicatif. L'utilisation de sessions de paiement côté client (Stripe Checkout, ou équivalent local) garantit la conformité PCI-DSS.</p>
+
+                            <h2>5. Messagerie, notifications et feed social</h2>
+                            <p>La messagerie entre acheteurs et vendeurs est un élément clé de l'expérience. Elle doit supporter les conversations en temps réel, le partage de fichiers et l'historique. Côté notifications, il faut gérer les alertes email, SMS et push pour chaque événement pertinent : nouvelle commande, message reçu, changement de statut, promotion.</p>
+                            <p>Le feed social — mur d'activité montrant les nouveaux produits, promotions et actualités des vendeurs suivis — ajoute une dimension engagement. Le infinite scroll avec TanStack Query et un système de pagination par curseur assure des performances optimales même avec des milliers de produits.</p>
+
+                            <h2>6. Dashboards vendeur et admin</h2>
+                            <p>Le dashboard vendeur doit offrir une vue claire de ses ventes, revenus, produits les plus performants et avis clients. Le dashboard admin va plus loin avec les métriques globales de la marketplace : volume de transactions, taux de conversion, vendeurs actifs, litiges en cours.</p>
+                            <p>La construction de ces dashboards avec des composants réutilisables (graphiques, cartes KPI, tableaux triables) est grandement simplifiée par un design system cohérent. Les graphiques peuvent être générés côté serveur ou avec une bibliothèque légère côté client.</p>
+
+                            <h2>7. Architecture technique recommandée</h2>
+                            <p>Pour une telle plateforme, je recommande :</p>
+                            <ul>
+                                <li><strong>Frontend</strong> : Next.js (SSR/SSG pour le SEO), Tailwind CSS v4, shadcn/ui pour les composants UI, TanStack Query pour la gestion des données asynchrones, Zustand pour le state global</li>
+                                <li><strong>Backend</strong> : Node.js avec une API REST structurée, Drizzle ORM pour les requêtes PostgreSQL, authentification JWT avec refresh tokens</li>
+                                <li><strong>Infrastructure</strong> : Docker Compose en développement, Traefik comme reverse proxy, PostgreSQL sur Neon ou en conteneur, stockage S3/R2 pour les fichiers</li>
+                                <li><strong>CI/CD</strong> : GitHub Actions pour les tests et déploiements automatisés</li>
+                            </ul>
+
+                            <h2>Conclusion</h2>
+                            <p>Une marketplace multi-vendeurs est un projet d'architecture ambitieux qui touche à tous les aspects du développement logiciel : bases de données relationnelles, systèmes de paiement, temps réel, stockage de fichiers, sécurité et performance. L'essentiel est de bien séparer les responsabilités par domaine (catalogue, commandes, paiements, utilisateurs) et de construire par couches, en commençant par le noyau avant d'ajouter les fonctionnalités transversales comme les notifications ou le feed social.</p>
+
+                        </article>
+
+                        <div class="mt-5 d-flex gap-3 flex-wrap wow fadeInUp delay-0-2s">
+                            <a href="blog.html" class="theme-btn"><i class="far fa-angle-left"></i> Retour au blog</a>
+                            <a href="contact.html" class="read-more">Me contacter <i class="far fa-angle-right"></i></a>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="service-item wow fadeInUp" data-tilt="9" delay-0-2s">
-                            <div class="number">01.</div>
-                            <div class="content">
-                                <h4>Applications web &amp; plateformes</h4>
-                                <p>Conception et développement de bout en bout d'applications web modernes et de plateformes : SaaS, marketplaces et portails.</p>
-                            </div>
-                            <a href="contact.html" class="details-btn"><i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="service-item wow fadeInUp" data-tilt="9" delay-0-4s">
-                            <div class="number">02.</div>
-                            <div class="content">
-                                <h4>Solutions de gestion &amp; ERP</h4>
-                                <p>Facturation, gestion commerciale, gestion scolaire et solutions ERP adaptées aux réalités locales (réf. SYRCOW/TAXCOW, FAKTURA).</p>
-                            </div>
-                            <a href="contact.html" class="details-btn"><i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="service-item wow fadeInUp" data-tilt="9" delay-0-2s">
-                            <div class="number">03.</div>
-                            <div class="content">
-                                <h4>Applications Desktop &amp; mobiles</h4>
-                                <p>Applications Desktop installables (Tauri, React, Vite, TypeScript) et interfaces mobile-first, avec mode offline &amp; synchronisation.</p>
-                            </div>
-                            <a href="contact.html" class="details-btn"><i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="service-item wow fadeInUp" data-tilt="9" delay-0-4s">
-                            <div class="number">04.</div>
-                            <div class="content">
-                                <h4>Digitalisation &amp; transformation numérique</h4>
-                                <p>Digitalisation des processus d'entreprise, gestion de projets et accompagnement des structures privées et associatives.</p>
-                            </div>
-                            <a href="contact.html" class="details-btn"><i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="service-item wow fadeInUp" data-tilt="9" delay-0-2s">
-                            <div class="number">05.</div>
-                            <div class="content">
-                                <h4>Infrastructure &amp; Cloud</h4>
-                                <p>Administration Linux, conteneurisation Docker, reverse proxy (Nginx/Traefik), déploiement Cloud, gestion de domaines et SSL.</p>
-                            </div>
-                            <a href="contact.html" class="details-btn"><i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="service-item wow fadeInUp" data-tilt="9" delay-0-4s">
-                            <div class="number">06.</div>
-                            <div class="content">
-                                <h4>Conseil, maintenance &amp; évolution</h4>
-                                <p>Conseil en informatique et transformation digitale, correction et optimisation de solutions existantes, réduction de la dette technique, documentation.</p>
-                            </div>
-                            <a href="contact.html" class="details-btn"><i class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-btn text-center mt-5 wow fadeInUp delay-0-2s">
-                    <a href="contact.html" class="theme-btn">Discutons de votre projet <i class="far fa-angle-right"></i></a>
                 </div>
             </div>
             <div class="bg-lines">
@@ -212,7 +205,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="copyright-text">
-                                <p>© 2026 Emmanuel Mulonda Johannes. Tous droits réservés.</p>
+                                <p>&copy; 2026 Emmanuel Mulonda Johannes. Tous droits réservés.</p>
                             </div>
                         </div>
                         <div class="col-lg-6 text-lg-end">

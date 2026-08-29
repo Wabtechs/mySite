@@ -8,8 +8,7 @@
   "use strict";
 
   var reduceMotion =
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ------------------------------------------------------------------
      Scroll reveal via IntersectionObserver
@@ -19,12 +18,14 @@
   function initReveal() {
     var els = document.querySelectorAll(
       ".reveal, .reveal-up, .reveal-down, .reveal-left, .reveal-right, " +
-        ".reveal-zoom, .reveal-flip, .reveal-blur"
+        ".reveal-zoom, .reveal-flip, .reveal-blur",
     );
     if (!els.length) return;
 
     if (reduceMotion || !("IntersectionObserver" in window)) {
-      els.forEach(function (el) { el.classList.add("in-view"); });
+      els.forEach(function (el) {
+        el.classList.add("in-view");
+      });
       return;
     }
 
@@ -40,10 +41,12 @@
           }
         });
       },
-      { threshold: 0.16, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0.16, rootMargin: "0px 0px -8% 0px" },
     );
 
-    els.forEach(function (el) { io.observe(el); });
+    els.forEach(function (el) {
+      io.observe(el);
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -55,13 +58,15 @@
     var targets = document.querySelectorAll(".eh-typed");
     if (!targets.length) return;
 
-    function typeWord(el, words, wordIndex, charIndex, deleting, resolveStart) {
+    function typeWord(el, words, wordIndex, charIndex, deleting, _resolveStart) {
       var word = words[wordIndex];
       var out = word.slice(0, charIndex);
 
       if (deleting && charIndex === 0) {
         wordIndex = (wordIndex + 1) % words.length;
-        setTimeout(function () { typeWord(el, words, wordIndex, 0, false); }, 220);
+        setTimeout(function () {
+          typeWord(el, words, wordIndex, 0, false);
+        }, 220);
         return;
       }
 
@@ -96,7 +101,11 @@
     targets.forEach(function (el) {
       var data = el.getAttribute("data-words");
       var words = [];
-      try { words = JSON.parse(data); } catch (e) { words = []; }
+      try {
+        words = JSON.parse(data);
+      } catch {
+        words = [];
+      }
       if (!words.length) return;
 
       if (reduceMotion) {
@@ -127,9 +136,16 @@
       });
       ticking = false;
     }
-    window.addEventListener("scroll", function () {
-      if (!ticking) { requestAnimationFrame(update); ticking = true; }
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
     update();
   }
 
@@ -150,8 +166,7 @@
       var y = (e.clientY - rect.top) / rect.height - 0.5;
       if (raf) return;
       raf = requestAnimationFrame(function () {
-        img.style.transform =
-          "translate3d(" + x * 22 + "px, " + y * 22 + "px, 0)";
+        img.style.transform = "translate3d(" + x * 22 + "px, " + y * 22 + "px, 0)";
         raf = null;
       });
     });
@@ -184,7 +199,7 @@
       function frame(ts) {
         if (!start) start = ts;
         var progress = Math.min((ts - start) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
+        var eased = 1 - (1 - progress) ** 3;
         el.textContent = format(target * eased);
         if (progress < 1) requestAnimationFrame(frame);
         else el.textContent = format(target);
@@ -211,9 +226,11 @@
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
-    counters.forEach(function (el) { io.observe(el); });
+    counters.forEach(function (el) {
+      io.observe(el);
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -231,7 +248,11 @@
         var y = (e.clientY - rect.top) / rect.height - 0.5;
         var max = parseFloat(card.getAttribute("data-tilt")) || 8;
         card.style.transform =
-          "perspective(900px) rotateX(" + -y * max + "deg) rotateY(" + x * max + "deg) translateY(-6px)";
+          "perspective(900px) rotateX(" +
+          -y * max +
+          "deg) rotateY(" +
+          x * max +
+          "deg) translateY(-6px)";
       });
       card.addEventListener("mouseleave", function () {
         card.style.transform = "perspective(900px) rotateX(0) rotateY(0)";
@@ -262,18 +283,23 @@
     div.className = "eh-cursor";
     document.body.appendChild(div);
     var raf = null;
-    var x = -999, y = -999;
-    window.addEventListener("mousemove", function (e) {
-      x = e.clientX;
-      y = e.clientY;
-      div.classList.remove("is-hidden");
-      if (raf) return;
-      raf = requestAnimationFrame(function () {
-        div.style.left = x + "px";
-        div.style.top = y + "px";
-        raf = null;
-      });
-    }, { passive: true });
+    var x = -999,
+      y = -999;
+    window.addEventListener(
+      "mousemove",
+      function (e) {
+        x = e.clientX;
+        y = e.clientY;
+        div.classList.remove("is-hidden");
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          div.style.left = x + "px";
+          div.style.top = y + "px";
+          raf = null;
+        });
+      },
+      { passive: true },
+    );
     window.addEventListener("mouseleave", function () {
       div.classList.add("is-hidden");
     });

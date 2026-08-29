@@ -7,3 +7,12 @@ desktop.ini
 
 # Local opencode temp
 .tmp
+
+# Node / Biome
+node_modules/
+
+# Personal / intermediate files (not part of the site)
+CV.md
+mes infos.md
+gen_cv.py
+.cv_check.txt
